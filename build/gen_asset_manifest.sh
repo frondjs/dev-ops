@@ -6,6 +6,10 @@ copy_dir=$1
 mkdir -p "$copy_dir"
 rm -rf "$copy_dir"/*
 
+if [ ! -d "static" ]; then
+  exit 0
+fi
+
 # enter god mode in bash
 # read files in directory recursively
 # get md5 hashes of each file
