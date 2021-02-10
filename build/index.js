@@ -40,5 +40,7 @@ function shortenCSSPropertyName(name) {
 module.exports = {
   cleanupPrevBuild: cleanupPrevBuild,
   copyAssets: copyAssets,
-  shortenCSSPropertyName: shortenCSSPropertyName
+  shortenCSSPropertyName: shortenCSSPropertyName,
+  njk: require('./rollup-plugin-njk'),
+  html: require('./rollup-plugin-html')
 }

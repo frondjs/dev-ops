@@ -1,6 +1,6 @@
 {
   "name": "@frondjs/dev-ops",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "FrondJS devops.",
   "author": {
     "name": "Murat Gözel",
@@ -15,7 +15,7 @@
   "homepage": "https://github.com/frondjs/dev-ops#readme",
   "main": "index.js",
   "bin": {
-    "frond-dev-ops": "./index.js"
+    "frond-dev-ops": "./cli.js"
   },
   "scripts": {
     "commit": "node devops/commit.js commit",
