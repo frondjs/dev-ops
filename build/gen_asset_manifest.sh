@@ -10,7 +10,7 @@ if [ ! -d "static" ]; then
   exit 0
 fi
 
-# enter god mode in bash
+# enter god mode in bash 🤪
 # read files in directory recursively
 # get md5 hashes of each file
 # copy each file to dest dir
