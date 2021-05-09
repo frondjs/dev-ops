@@ -2,6 +2,7 @@ const {execSync} = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const git = require('git-rev-sync')
+const colors = require('colors')
 
 module.exports = async function deploy(argv) {
   const config = require('../config')(argv)
@@ -20,10 +21,24 @@ module.exports = async function deploy(argv) {
   }
 
   // build
-  execSync(`frond pogen && frond pojson`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
-  execSync(`npm run build`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+  execSync(`frond pojson`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+
+  try {
+    execSync(`npm run build`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+  } catch (e) {
+    console.log(e)
+    console.log('Canceled deployment.'.red)
+    return;
+  }
+
   if (config.get('env') != 'development') {
-    execSync(`frond ssr`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+    try {
+      execSync(`frond ssr`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+    } catch (e) {
+      console.log(e)
+      console.log('Canceled deployment.'.red)
+      return;
+    }
   }
 
   // create a distribution
@@ -35,12 +50,20 @@ module.exports = async function deploy(argv) {
   }
   const remoteProjectPath = path.join(config.get('serverDistPath'), name)
   const remoteConnStr = config.get('serverConnStr') + ':' + remoteProjectPath
-  execSync(`rsync -a --no-g --no-o --ignore-existing ${distpath} ${remoteConnStr}`,
-    {shell: true, stdio:[0, 1, 2], encoding: 'utf8'})
+  try {
+    execSync(`rsync -a --no-g --no-o --ignore-existing ${distpath} ${remoteConnStr}`,
+      {shell: true, stdio:[0, 1, 2], encoding: 'utf8'})
+  } catch (e) {
+    console.log(e)
+    console.log('Canceled deployment.'.red)
+    return;
+  }
 
   // publish
   const remoteProjectDeploymentPath = path.join(config.get('serverDistPath'), name, path.basename(distpath))
   const livePath = path.join(config.get('serverDistPath'), name, 'live')
   execSync(`ssh ${config.get('serverConnStr')} ln -sfn ${remoteProjectDeploymentPath} ${livePath} && exit`,
     {shell: true, stdio:[0, 1, 2], encoding: 'utf8'})
+
+  console.log(`Deployed successfully.`.blue)
 }

@@ -184,7 +184,7 @@ module.exports = function create(argv) {
             createConfigFiles(config)
 
             // remove pack
-            fs.unlink(packfile)
+            fs.unlinkSync(packfile)
 
             // enable git flow if this is a git repo
             initGitFlow()

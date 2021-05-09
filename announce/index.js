@@ -24,8 +24,8 @@ module.exports = async function announce(argv) {
 
   let version = null
   // checkout to specified version
-  if (argv.version) {
-    version = argv.version
+  if (argv.v) {
+    version = argv.v
   }
   // or the latest tag
   else {
@@ -35,18 +35,13 @@ module.exports = async function announce(argv) {
 
   console.log(colors.blue('Checking version ' + version))
 
-  const tempBranch = 'announce-' + version
-  execSync(`git checkout tags/${version} -b ${tempBranch} > /dev/null`, shellopts)
   const commitMessage = execSync(`git tag -l --format='%(contents)' ${version}`, {encoding: 'utf8'})
-
-  execSync(`git checkout ${currentBranch} > /dev/null`, shellopts)
-  execSync(`git branch -D ${tempBranch} > /dev/null`, shellopts)
 
   console.log('Writing an announcement'.blue)
 
   let versionLong = version
   if (config.get('versioningScheme') == 'calver') {
-    versionLong = calver.pretty(config.get('versioningFormat'), version.slice(1), language)
+    versionLong = calver.pretty(config.get('versioningFormat'), version.slice(0, 1) == 'v' ? version.slice(1) : version, language)
   }
   const templatePath = path.join(argv.ctx.framework.path, `announce/templates/${language}.html`)
   const template = fs.readFileSync(templatePath, 'utf8')
@@ -54,7 +49,7 @@ module.exports = async function announce(argv) {
     versionFancy: versionLong,
     projectName: pkgjson.name,
     url: config.get('produrl'),
-    releaseNotes: commitMessage
+    releaseNotes: commitMessage.split(/[\r\n]/).map(msg => msg + "<br>").join('')
   })
 
   let sender = null

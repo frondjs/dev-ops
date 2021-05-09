@@ -54,41 +54,35 @@ require('yargs')
     require('./cdist')(argv)
   })
   .command('git', 'Git flow wrapper commands.', yargs => {
-    yargs.positional('tag', {
-      type: 'string',
-      default: '',
-      describe: 'Level of the commit.'
-    })
-    yargs.positional('start', {
-      type: 'boolean',
-      default: false,
-      describe: 'Creates a new branch.'
-    })
-    yargs.positional('finish', {
-      type: 'boolean',
-      default: false,
-      describe: 'Tags and merges the release to the publish branch'
-    })
-    yargs.positional('name', {
-      type: 'string',
-      default: '',
-      describe: 'Name of the feature.'
-    })
-
     yargs.positional('feature', {
       type: 'string',
       default: '',
-      describe: 'Creates a new feature branch.'
+      describe: 'Creates a new feature branch. The value of this argument should be the name of the feature.'
     })
     yargs.positional('release', {
       type: 'boolean',
       default: false,
-      describe: 'Creates a new release branch according to the current version.'
+      describe: 'Creates a new release branch. The value of this argument is automatically assigned.'
     })
     yargs.positional('hotfix', {
       type: 'boolean',
       default: false,
-      describe: 'Creates a new hotfix branch according to the current version.',
+      describe: 'Creates a new hotfix branch. The value of this argument is automatically assigned.',
+    })
+
+    yargs.positional('tag', {
+      type: 'string',
+      describe: 'Level of the commit.'
+    })
+    yargs.positional('finish', {
+      type: 'boolean',
+      default: false,
+      describe: 'Tags and merges the release, feature or hotfix with the default branch.'
+    })
+    yargs.positional('message', {
+      type: 'string',
+      alias: 'm',
+      describe: 'Commit message. It can be specified multiple times to create multiline commit messages.'
     })
   }, function(argv) {
     require('./gitflow')(argv)
@@ -106,7 +100,7 @@ require('yargs')
     require('./deploy')(argv)
   })
   .command('announce', 'Sends an email to the list of people specified in the config.', yargs => {
-    yargs.positional('version', {
+    yargs.positional('v', {
       type: 'string',
       default: '',
       describe: 'The version number you would like to announce.'

@@ -1,6 +1,6 @@
 {
   "name": "@frondjs/dev-ops",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "FrondJS devops.",
   "author": {
     "name": "Murat Gözel",
@@ -31,22 +31,22 @@
   },
   "dependencies": {
     "@rollup/pluginutils": "^4.1.0",
-    "apify": "^1.0.2",
-    "basekits": "^1.2.4",
-    "calver": "^21.1.1",
-    "cheerio": "^1.0.0-rc.5",
+    "apify": "^1.1.2",
+    "basekits": "^1.2.5",
+    "calver": "^21.1.2",
+    "cheerio": "^1.0.0-rc.9",
     "compressing": "^1.5.1",
-    "convict": "^6.0.0",
+    "convict": "^6.1.0",
     "git-rev-sync": "^3.0.1",
     "html-minifier": "^4.0.0",
     "madmiral": "^1.0.2",
     "nunjucks": "^3.2.3",
-    "playwright": "^1.9.1",
+    "playwright": "^1.10.0",
     "po2json": "^0.4.5",
     "puppeteer": "^7.1.0",
-    "semver": "^7.3.4",
+    "semver": "^7.3.5",
     "xgettext-regex": "^0.3.0",
-    "xmlbuilder2": "^2.4.0",
+    "xmlbuilder2": "^2.4.1",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

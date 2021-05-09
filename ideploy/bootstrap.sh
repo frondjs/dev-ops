@@ -210,7 +210,7 @@ server {
     expires off;
     etag off;
 
-    try_files \$uri \$uri/index.html =404;
+    try_files \$uri \$uri/index.html /index.html =404;
   }
 
   # immutable static assets, caching enabled

@@ -6,11 +6,11 @@ Build, test and distribute with Frond!
 2. `openssl`
 3. `rsync`
 4. `md5sum`
-5. `git-flow` (If you use git in your project.)
+5. `gitflow-avh` (If you use git in your project.)
 
 **On mac**, just install:
 1. `brew install md5sha1sum`
-2. `brew install git-flow`
+2. `brew install gitflow-avh`
 
 It will create `~/.frondjs` directory and will install [@frondjs/dev-server](https://github.com/frondjs/dev-server) package upon installation.
 
@@ -28,7 +28,7 @@ frond create
 ## Configure
 Frond keep configuration files inside `~/.frondjs` folder. There should be a config file for each environment you work. Default values are inside `~/.frondjs/project-name-development.config.json`. There is also a `~/.frondjs/project-name-production.config.json` file. These two files generated automatically by `create` script for convenience. Configuration params are loaded by the excellent [https://github.com/mozilla/node-convict](convict) library according to the environment you specify while sending commands. (`NODE_ENV=production frond deploy` for example.) The default value for the environment is **development**.
 
-## Configure For Development
+### Configure For Development
 Important settings while working with development environment:
 ```js
 {
@@ -39,7 +39,7 @@ Important settings while working with development environment:
 }
 ```
 
-## Configure For Production And Any Other Environment
+### Configure For Production And Any Other Environment
 Important settings while working with production (and any other) environment:
 ```js
 {
@@ -75,37 +75,33 @@ Important settings while working with production (and any other) environment:
 }
 ```
 
-## Start Developing
-```sh
-frond develop
-```
-This will start development server and app will reload itself on any change in the codebase.
-
-## Update GIT Repository
-If your project based on git, here is how to make the first commit with frond.
-
+### Configure GIT
 Frond supports both [https://github.com/muratgozel/node-calver](calver) and [https://github.com/npm/node-semver](semver) as versioning scheme. The default scheme
 is calver and the default format is **yy.mm.micro.dev**. You can change these settings in the config file.
 
-Make sure that your git tool configured correctly:
+First of all, make sure that your git tool configured correctly:
 ```sh
 git config --global user.email "your@email.address"
 git config --global user.name "Your Name"
 git config --global core.editor 'vim'
 ```
-Create a new release:
-```sh
-frond git --release --start --tag="dev"
-```
-**dev** is the default tag on initial project state. After this command the new version of your project will be something like **21.3.0-dev.1**. If we were specified **micro** as tag then it would be **21.3.1**
 
-When you'r done with the changes stage and commit via code editor or command line:
+## Start Developing
+**If your project based on git**, create a release tag before making any changes:
 ```sh
-git add .
-git commit -m "Your commit message."
+frond git --release --tag=dev
 ```
+**dev** is the default tag when you don't specify the tag flag according to your versioning format. After this command execution, the new version of your project will be something like **21.3.0-dev.1**. If we were specified **micro** as tag, then it would be **21.3.1**
 
-Finally, finish the release branch:
+To learn more about the conventions in naming tags, please refer the documentation of node-calver and node-semver libraries.
+
+Start developing:
+```sh
+frond develop
+```
+This will start development server and app will reload itself on any change in the codebase.
+
+When you'r done with the changes finish the release:
 ```sh
 frond git --release --finish
 ```
