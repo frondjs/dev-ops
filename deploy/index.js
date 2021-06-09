@@ -1,4 +1,4 @@
-const {execSync} = require('child_process')
+const {execSync, spawn} = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const git = require('git-rev-sync')
@@ -31,9 +31,17 @@ module.exports = async function deploy(argv) {
     return;
   }
 
-  if (config.get('env') != 'development') {
+  if (config.get('env') != 'development' && config.get('ssr') === true) {
     try {
+      const child = spawn('node_modules/.bin/frond-dev-server', ['start', '--publicpath', 'build', '--port', config.get('ssrPort').slice(1)])
+
+      child.stderr.on('data', (data) => {
+        console.error(data.toString());
+      })
+
       execSync(`frond ssr`, {shell: true, stdio: [0, 1, 2], encoding: 'utf8'})
+
+      child.kill('SIGINT')
     } catch (e) {
       console.log(e)
       console.log('Canceled deployment.'.red)

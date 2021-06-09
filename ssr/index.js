@@ -40,7 +40,7 @@ module.exports = function(argv) {
     })
 
     const requestQueue = await Apify.openRequestQueue()
-    await requestQueue.addRequest({ url: `http://localhost${config.get('port')}` })
+    await requestQueue.addRequest({ url: `http://localhost${config.get('ssrPort')}` })
 
     const handlePageFunction = async ({page, request}) => {
       //console.log(`Crawling ${request.url}`)
@@ -71,7 +71,7 @@ module.exports = function(argv) {
       const enqueued = await enqueueLinks({
         page,
         requestQueue,
-        pseudoUrls: [`http://localhost${config.get('port')}[.*]`],
+        pseudoUrls: [`http://localhost${config.get('ssrPort')}[.*]`],
       })
       //console.log(`Enqueued ${enqueued.length} URLs.`)
     }

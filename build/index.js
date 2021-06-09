@@ -37,10 +37,15 @@ function shortenCSSPropertyName(name) {
   return result
 }
 
+function copyNginxConfig() {
+  execSync(`if find nginx -mindepth 1 -maxdepth 1 | read; then cp -a nginx build/; fi`)
+}
+
 module.exports = {
   cleanupPrevBuild: cleanupPrevBuild,
   copyAssets: copyAssets,
   shortenCSSPropertyName: shortenCSSPropertyName,
   njk: require('./rollup-plugin-njk'),
-  html: require('./rollup-plugin-html')
+  html: require('./rollup-plugin-html'),
+  copyNginxConfig: copyNginxConfig
 }

@@ -40,10 +40,10 @@ module.exports = function gitflow(argv) {
 
   // create a temporary file for commit message
   const commitMsgFile = path.join(os.homedir(), 'COMMIT_MESSAGE.txt')
-  if (!argv.message && !fs.existsSync(commitMsgFile)) {
+  if (!argv.message && !fs.existsSync(commitMsgFile) && isFinishing) {
     throw new Error(`Either no -m flag specified and no ${commitMsgFile} file found for commit message.`)
   }
-  if (argv.message) {
+  if (argv.message && isFinishing) {
     const commitMessages = Array.isArray(argv.m) ? argv.m : [argv.m]
     const commitMsgFileContent = commitMessages.reduce(function(memo, msg) {
       memo += msg + "\r\n"
@@ -91,5 +91,7 @@ module.exports = function gitflow(argv) {
     }
   }
 
-  execSync(`rm ${commitMsgFile}`)
+  if (isFinishing) {
+    execSync(`rm ${commitMsgFile}`)
+  }
 }

@@ -18,6 +18,8 @@ OPTIONS:
   --osuser            Project directory will be set up under this user's dir.
 
   --protocol          http or https. https by default.
+
+  --puid              CMS project identifier.
 USAGE
 }
 
@@ -92,6 +94,7 @@ PROJECT_NAME=""
 SERVER_HOSTNAME=""
 CERTBOT_EMAIL=""
 PROTOCOL="https:"
+PUID=""
 
 while true; do
   case "$1" in
@@ -128,6 +131,10 @@ while true; do
       PROTOCOL="$2"
       shift 2
       ;;
+    --puid)
+      PUID="$2"
+      shift 2
+      ;;
     *)
       break
       ;;
@@ -151,7 +158,7 @@ fi
 anchor_ip="${anchor_ip}:"
 
 server_block_www=""
-if ! is_subdomain $SERVER_HOSTNAME; then
+if ! is_subdomain_psl $SERVER_HOSTNAME; then
   read -r -d '' server_block_www << EOM
 server {
   listen ${anchor_ip}80;
@@ -194,10 +201,10 @@ server {
   add_header Referrer-Policy strict-origin-when-cross-origin;
 
   # user custom config, if exist
-  include ${WEB_SERVER_PATH}/nginx.*.conf;
+  include ${WEB_SERVER_PATH}/nginx/*.conf;
 
   # forbidden paths
-  location ~* /nginx.*.conf {
+  location ~* /nginx/*.conf {
     deny all;
     return 404;
   }
@@ -226,6 +233,14 @@ server {
     root ${WEB_SERVER_PATH};
     try_files \$uri =404;
   }
+
+  # cms media
+  location ^~ /media/ {
+    etag off;
+    expires max;
+    proxy_pass https://cms/uploads/${PUID}/\$request_basename;
+    proxy_set_header Host cms.gozel.com.tr;
+  }
 }
 EOF
   nginx -t 2>/dev/null > /dev/null
@@ -237,7 +252,7 @@ fi
 
 info "Installing ssl certificate."
 certbot_cmd_domains="-d ${SERVER_HOSTNAME} "
-if ! is_subdomain $SERVER_HOSTNAME; then
+if ! is_subdomain_psl $SERVER_HOSTNAME; then
   certbot_cmd_domains+="-d www.${SERVER_HOSTNAME}"
 fi
 

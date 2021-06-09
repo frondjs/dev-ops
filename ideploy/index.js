@@ -44,7 +44,7 @@ module.exports = async function ideploy(argv) {
   const certbotEmail = config.get('certbotEmail')
   const envstr = 'LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8'
   const script = path.resolve(__dirname, 'bootstrap.sh')
-  const cmd = `ssh ${remoteConnStr} ${envstr} "bash -s -- " < ${script} --hostname ${hostname} --protocol ${protocol} --project ${argv.ctx.project.name} --certbotemail ${certbotEmail}${cmdOsUser}`
+  const cmd = `ssh ${remoteConnStr} ${envstr} "bash -s -- " < ${script} --hostname ${hostname} --protocol ${protocol} --project ${argv.ctx.project.name} --certbotemail ${certbotEmail} --puid ${argv.puid}${cmdOsUser}`
   execSync(cmd, {shell: true, encoding: 'utf8', stdio: [0, 1, 2]})
 
   return;

@@ -88,5 +88,16 @@ module.exports = {
     doc: 'Filepath of the server to server credentials file.',
     default: '',
     env: 'FROND_APPLICATION_CREDENTIALS'
+  },
+  ssr: {
+    format: Boolean,
+    doc: 'Enable server side rendering.',
+    default: true,
+    env: 'FROND_SSR'
+  },
+  ssrPort: {
+    doc: 'The port of the dev server while ssr script running. Used in development.',
+    default: ':9202',
+    env: 'FROND_SSR_PORT'
   }
 }

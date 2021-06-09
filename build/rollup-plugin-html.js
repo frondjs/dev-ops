@@ -5,7 +5,7 @@ const defaultOpts = {
   filename: 'index.html',
   title: 'FrondJS App',
   meta: ['<meta charset="utf-8">'],
-  body: '<div id="frondapp">Please wait.</div>'
+  body: '<div id="frondapp"></div>'
 }
 
 module.exports = function html(options={}) {

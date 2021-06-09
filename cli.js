@@ -87,7 +87,13 @@ require('yargs')
   }, function(argv) {
     require('./gitflow')(argv)
   })
-  .command('ideploy', 'Initial deploy. Setup project on a remote server.', yargs => {}, async function(argv) {
+  .command('ideploy', 'Initial deploy. Setup project on a remote server.', yargs => {
+    yargs.positional('puid', {
+      type: 'string',
+      default: '',
+      describe: 'Project identifier used by nginx to serve static assets hosted by cms.'
+    })
+  }, async function(argv) {
     await require('./ideploy')(argv)
   })
   .command('deploy', 'Deploys the project. Accepts version numbers in git projects.', yargs => {
